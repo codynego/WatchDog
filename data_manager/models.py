@@ -1,8 +1,10 @@
 from django.db import models
+import uuid
 
 # Create your models here.
 
 class Server(models.Model):
+    id = models.CharField(primary_key=True, max_length=200, editable=False)
     hostname = models.CharField(max_length=200)
     ip_address = models.CharField(max_length=200)
     memory_capacity = models.IntegerField()
@@ -13,6 +15,11 @@ class Server(models.Model):
 
     def __str__(self):
         return f"{self.hostname} - {self.ip_address}"
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = uuid.uuid4().hex
+        super(Server, self).save(*args, **kwargs)
     
 
 class Metric(models.Model):
