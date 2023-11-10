@@ -1,9 +1,11 @@
 from django.db import models
 import uuid
+from user_manager.models import User
 
 # Create your models here.
 
 class Server(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     id = models.CharField(primary_key=True, max_length=200, editable=False)
     hostname = models.CharField(max_length=200)
     ip_address = models.CharField(max_length=200)
