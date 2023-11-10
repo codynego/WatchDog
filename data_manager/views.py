@@ -43,7 +43,7 @@ class MetricList(generics.ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         server = Server.objects.get(pk=self.kwargs["pk"])
-        queryset = Metric.objects.objects.filer(server=server)
+        queryset = Metric.objects.filter(server=server)
         return queryset
     
     def post(self, request, *args, **kwargs):
