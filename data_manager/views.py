@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Server, Metric, AlertRule, ServerManager, Invite
+from .models import Server, Metric, ServerManager, Invite
 from rest_framework import generics
-from .serializers import ServerSerializer, MetricSerializer, AlertRuleSerializer, InviteSerializer
+from .serializers import ServerSerializer, MetricSerializer, InviteSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -30,11 +30,8 @@ class ServerList(generics.ListCreateAPIView):
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
     def get_queryset(self):
-        return Server.objects.filter(admins=self.request.user)
+        return Server.objects.filter(user=self.request.user)
     
     def post(self, request, *args, **kwargs):
         serializer = ServerSerializer(data=request.data, context={'request': request})

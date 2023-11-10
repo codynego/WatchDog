@@ -26,7 +26,7 @@ class Server(models.Model):
 
 
 
-        return f"{self.user.username} - {self.server.hostname}"
+        return f"{self.user.username} - {self.hostname}"
 
 
    

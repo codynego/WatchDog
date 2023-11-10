@@ -3,6 +3,8 @@ from rest_framework import serializers
 from .models import Server, Metric, Invite, ServerManager
 from user_manager.models import User
 from user_manager.serializers import UserSerializer
+
+
 class ServerSerializer(ModelSerializer):
     user = UserSerializer(read_only=True)
 
@@ -10,6 +12,11 @@ class ServerSerializer(ModelSerializer):
         model = Server
         fields = ['id', 'hostname', 'ip_address', 'memory_capacity', 'cpu_capacity', 'disk_capacity', 'user']
         read_only_fields = ['user']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        server = Server.objects.create(user=user, **validated_data)
+        return server
 
 
 class MetricSerializer(ModelSerializer):
