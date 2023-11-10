@@ -11,6 +11,11 @@ class DataCollector(generics.CreateAPIView):
     queryset = Metric.objects.all()
     serializer_class = MetricSerializer
 
+    def get_queryset(self, *args, **kwargs):
+        server = Server.objects.get(pk=self.kwargs["pk"])
+        queryset = Metric.objects.filter(server=server)
+        return queryset
+
     def post(self, request, *args, **kwargs):
         server = Server.objects.get(pk=self.kwargs["pk"])
         serializer = MetricSerializer(data=request.data)
@@ -33,11 +38,16 @@ class ServerList(generics.ListCreateAPIView):
 
 
 class ServerDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
 
+    def get_queryset(self):
+        return Server.objects.filter(user=self.request.user)
+
 
 class MetricList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Metric.objects.all()
     serializer_class = MetricSerializer
 
@@ -56,6 +66,12 @@ class MetricList(generics.ListCreateAPIView):
     
 
 class MetricDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Metric.objects.all()
     serializer_class = MetricSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        server = Server.objects.get(pk=self.kwargs["pk"])
+        queryset = Metric.objects.filter(server=server)
+        return queryset
         
