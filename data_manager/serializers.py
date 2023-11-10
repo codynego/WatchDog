@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import Server, Metric, AlertRule, Invite, ServerManager
+from .models import Server, Metric, Invite, ServerManager
 from user_manager.models import User
 from user_manager.serializers import UserSerializer
 class ServerSerializer(ModelSerializer):
@@ -23,10 +23,6 @@ class MetricSerializer(ModelSerializer):
         return metric
 
 
-class AlertRuleSerializer(ModelSerializer):
-    class Meta:
-        model = AlertRule
-        fields = '__all__'
 
 class InviteSerializer(serializers.ModelSerializer):
     class Meta:

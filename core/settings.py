@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'data_manager',
     'user_manager',
+    'alert_service',
     'rest_framework',
 ]
 
