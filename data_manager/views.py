@@ -105,21 +105,3 @@ class InviteView(generics.ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
-class AcceptInvite(generics.CreateAPIView):
-    permission_classes = (IsAuthenticated,)
-    queryset = ServerManager.objects.all()
-    serializer_class = ServerManagerSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        server = Server.objects.get(pk=self.kwargs["pk"])
-        queryset = ServerManager.objects.filter(server=server)
-        return queryset
-    
-    def post(self, request, *args, **kwargs):
-        server = Server.objects.get(pk=self.kwargs["pk"])
-        serializer = ServerManagerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(server=server)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

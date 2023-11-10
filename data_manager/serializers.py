@@ -39,17 +39,9 @@ class InviteSerializer(serializers.ModelSerializer):
         email = validated_data['email']
         user = User.objects.filter(email=email).first()
 
-        # If the user doesn't exist, create an invite
-        if not user:
+        server_manager = ServerManager.objects.filter(server=server, user=user).first()
+        if server_manager:
+            raise serializers.ValidationError("User is already a server manager")
+        else:
             invite = Invite.objects.create(server=server, email=email)
             return invite
-        else:
-            # If the user exists, check if they are already a server manager
-            server_manager = ServerManager.objects.filter(server=server, user=user).first()
-            if server_manager:
-                raise serializers.ValidationError("User is already a server manager")
-            else:
-                # If the user exists but is not a server manager, create a server manager
-                invite = Invite.objects.create(server=server, email=email)
-                return invite
-            
